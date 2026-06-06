@@ -45,6 +45,14 @@
     cursor: pointer;
   }
 
+  .btn-secondary {
+    background: #607d8b;
+  }
+
+  .btn-danger {
+    background: #ef5350;
+  }
+
   .section {
     margin-top: 10px;
     padding-top: 8px;
@@ -64,6 +72,10 @@
   .totals {
     background: #e8f5e9;
     font-weight: bold;
+  }
+
+  .actions {
+    margin-top: 8px;
   }
 </style>
 </head>
@@ -106,7 +118,7 @@
 
 </div>
 
-<!-- ✅ BOÎTE TOTAUX -->
+<!-- TOTAUX -->
 <div class="card totals">
   <div class="section-title">📊 Totaux</div>
   <div>Kilomètres : <span id="totalKm">0</span></div>
@@ -118,8 +130,10 @@
 
 <script>
 let steps = [];
+let editingIndex = null;
 
 function addStep() {
+
   const newStep = {
     date: document.getElementById("date").value,
     step: document.getElementById("step").value,
@@ -139,63 +153,23 @@ function addStep() {
     return;
   }
 
-  steps.push(newStep);
+  if (editingIndex !== null) {
+    steps[editingIndex] = newStep;
+    editingIndex = null;
+  } else {
+    steps.push(newStep);
+  }
 
   render();
 
   document.querySelectorAll("input, textarea").forEach(el => el.value = "");
 }
 
-function render() {
-  const list = document.getElementById("list");
-  list.innerHTML = "";
-
-  let totalKm = 0;
-  let totalPrice = 0;
-
-  steps.forEach(s => {
-
-    totalKm += s.km;
-    totalPrice += s.transportPrice + s.hotelPrice;
-
-    list.innerHTML += `
-      <div class="card">
-
-        <div><strong>${s.date} — ${s.step}</strong></div>
-
-        <div class="section">
-          <div class="section-title">📍 Étape</div>
-          <div class="line">Kilomètres : ${s.km}</div>
-          <div class="line">Durée : ${s.duration}</div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">🚗 Déplacement</div>
-          <div class="line">Transport : ${s.transport}</div>
-          <div class="line">Prix transport : ${s.transportPrice} €</div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">🏨 Hébergement</div>
-          <div class="line">Nom : ${s.hotel}</div>
-          <div class="line">Adresse : ${s.hotelAddress}</div>
-          <div class="line">Prix : ${s.hotelPrice} €</div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">📋 Infos</div>
-          <div class="line">À voir : ${s.things}</div>
-          <div class="line">Commentaires : ${s.comments}</div>
-        </div>
-
-      </div>
-    `;
-  });
-
-  document.getElementById("totalKm").innerText = totalKm;
-  document.getElementById("totalPrice").innerText = totalPrice;
+function deleteStep(i) {
+  steps.splice(i, 1);
+  render();
 }
-</script>
 
-</body>
-</html>
+function editStep(i) {
+  const s = steps[i];
+

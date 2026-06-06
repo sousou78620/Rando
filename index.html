@@ -22,13 +22,8 @@
       gap: 16px;
     }
 
-    .left {
-      flex: 2;
-    }
-
-    .right {
-      flex: 1;
-    }
+    .left { flex: 2; }
+    .right { flex: 1; }
 
     .card {
       background: white;
@@ -41,14 +36,14 @@
     input, textarea {
       width: 100%;
       padding: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       border-radius: 8px;
       border: 1px solid #ccc;
     }
 
     button {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       border: none;
       border-radius: 10px;
       background: #0070f3;
@@ -56,6 +51,10 @@
       font-weight: bold;
       cursor: pointer;
       margin-top: 5px;
+    }
+
+    .secondary {
+      background: #666;
     }
 
     .small {
@@ -77,11 +76,10 @@
 
 <div class="container">
 
-  <!-- GAUCHE -->
+  <!-- FORMULAIRE -->
   <div class="left">
 
     <div class="card">
-
       <input id="startDate" type="date">
       <input id="step" placeholder="Étape">
       <input id="km" placeholder="Kilomètres">
@@ -103,7 +101,7 @@
 
   </div>
 
-  <!-- DROITE -->
+  <!-- TOTAUX -->
   <div class="right">
     <div class="card">
       <h3>📊 Totaux</h3>
@@ -116,6 +114,12 @@
 
 <script>
   let steps = JSON.parse(localStorage.getItem("steps") || "[]");
+  let editingIndex = null;
+
+  function formatDateFR(dateStr) {
+    if (!dateStr) return "";
+    return new Date(dateStr).toLocaleDateString("fr-FR");
+  }
 
   function save() {
     localStorage.setItem("steps", JSON.stringify(steps));
@@ -150,6 +154,32 @@
     render();
   }
 
+  function startEdit(index) {
+    editingIndex = index;
+    render();
+  }
+
+  function saveEdit(index) {
+    const card = document.getElementById("edit-" + index);
+
+    steps[index] = {
+      startDate: card.querySelector(".startDate").value,
+      step: card.querySelector(".step").value,
+      km: parseFloat(card.querySelector(".km").value) || 0,
+      transport: card.querySelector(".transport").value,
+      transportPrice: parseFloat(card.querySelector(".transportPrice").value) || 0,
+      hotel: card.querySelector(".hotel").value,
+      hotelPrice: parseFloat(card.querySelector(".hotelPrice").value) || 0,
+      duration: card.querySelector(".duration").value,
+      things: card.querySelector(".things").value,
+      comments: card.querySelector(".comments").value
+    };
+
+    editingIndex = null;
+    save();
+    render();
+  }
+
   function render() {
     const list = document.getElementById("list");
     list.innerHTML = "";
@@ -161,20 +191,40 @@
       totalKm += s.km;
       totalPrice += s.transportPrice + s.hotelPrice;
 
-      list.innerHTML += `
-        <div class="card">
-          <b>${s.startDate}</b><br>
-          📍 ${s.step}<br>
-          🚗 ${s.km} km<br>
-          🚆 ${s.transport} (${s.transportPrice} €)<br>
-          🏨 ${s.hotel} (${s.hotelPrice} €)<br>
-          ⏱️ ${s.duration}<br>
-          👀 ${s.things}<br>
-          <div class="small">${s.comments}</div>
-          <br>
-          <button onclick="deleteStep(${i})">🗑️ Supprimer</button>
-        </div>
-      `;
+      if (editingIndex === i) {
+        list.innerHTML += `
+          <div class="card" id="edit-${i}">
+            <input class="startDate" type="date" value="${s.startDate}">
+            <input class="step" value="${s.step}">
+            <input class="km" value="${s.km}">
+            <input class="transport" value="${s.transport}">
+            <input class="transportPrice" value="${s.transportPrice}">
+            <input class="hotel" value="${s.hotel}">
+            <input class="hotelPrice" value="${s.hotelPrice}">
+            <input class="duration" value="${s.duration}">
+            <textarea class="things">${s.things}</textarea>
+            <textarea class="comments">${s.comments}</textarea>
+
+            <button onclick="saveEdit(${i})">💾 Sauvegarder</button>
+          </div>
+        `;
+      } else {
+        list.innerHTML += `
+          <div class="card">
+            <b>${formatDateFR(s.startDate)}</b><br>
+            📍 ${s.step}<br>
+            🚗 ${s.km} km<br>
+            🚆 ${s.transport} (${s.transportPrice} €)<br>
+            🏨 ${s.hotel} (${s.hotelPrice} €)<br>
+            ⏱️ ${s.duration}<br>
+            👀 ${s.things}<br>
+            <div class="small">${s.comments}</div>
+            <br>
+            <button onclick="startEdit(${i})" class="secondary">✏️ Modifier</button>
+            <button onclick="deleteStep(${i})">🗑️ Supprimer</button>
+          </div>
+        `;
+      }
     });
 
     document.getElementById("totalKm").innerText = totalKm;

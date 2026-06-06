@@ -12,7 +12,9 @@
       padding: 16px;
     }
 
-    h1 { text-align: center; }
+    h1 {
+      text-align: center;
+    }
 
     .card {
       background: white;
@@ -35,6 +37,12 @@
       color: white;
       border: none;
       border-radius: 8px;
+    }
+
+    small {
+      font-weight: bold;
+      display: block;
+      margin-top: 5px;
     }
   </style>
 </head>
@@ -137,3 +145,65 @@ function render() {
 
   steps.forEach((s, i) => {
 
+    if (editingIndex === i) {
+      list.innerHTML += `
+        <div class="card" id="edit-${i}">
+          
+          <small>Date</small>
+          <input type="date" value="${s.startDate}">
+
+          <small>Étape</small>
+          <input value="${s.step}">
+
+          <small>Kilomètres</small>
+          <input value="${s.km}">
+
+          <small>Transport</small>
+          <input value="${s.transport}">
+
+          <small>Prix transport (€)</small>
+          <input value="${s.transportPrice}">
+
+          <small>Hôtel</small>
+          <input value="${s.hotel}">
+
+          <small>Prix hôtel (€)</small>
+          <input value="${s.hotelPrice}">
+
+          <small>Durée</small>
+          <input value="${s.duration}">
+
+          <small>Choses à voir</small>
+          <textarea>${s.things}</textarea>
+
+          <small>Commentaires</small>
+          <textarea>${s.comments}</textarea>
+
+          <button onclick="saveEdit(${i})">💾 Sauvegarder</button>
+        </div>
+      `;
+    } else {
+      list.innerHTML += `
+        <div class="card">
+          <b>${formatDateFR(s.startDate)}</b><br>
+          📍 ${s.step}<br>
+          🚗 ${s.km} km<br>
+          🚆 ${s.transport} (${s.transportPrice} €)<br>
+          🏨 ${s.hotel} (${s.hotelPrice} €)<br>
+          ⏱️ ${s.duration}<br>
+          👀 ${s.things}<br>
+
+          <button onclick="editStep(${i})">✏️ Modifier</button>
+          <button onclick="deleteStep(${i})">🗑️ Supprimer</button>
+        </div>
+      `;
+    }
+
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>

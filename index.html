@@ -1,124 +1,152 @@
-<!DOCTYPE html><!DOCTYPE htmlfr">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Itinéraire Vacances</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Itinéraire Vacances</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ FONT FIX -->
-  https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #eef5f0;
+  padding: 14px;
+  margin: 0;
+}
 
-  <style>
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: #eef5f0;
-      padding: 14px;
-      margin: 0;
-    }
+h1 { text-align:center; color:#2e7d32; }
 
-    h1 {
-      text-align: center;
-      color: #2e7d32;
-      font-weight: 800;
-      font-size: 26px;
-      margin-bottom: 15px;
-    }
+.card {
+  background:white;
+  border-radius:10px;
+  padding:10px;
+  margin:10px 0;
+}
 
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 14px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    }
+input, textarea {
+  width:100%;
+  margin-bottom:6px;
+}
 
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 8px;
-      border-radius: 12px;
-      border: 1px solid #d9e8dc;
-      background: #f8fbf9;
-      font-family: 'Nunito', sans-serif;
-    }
+button {
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  background:#4caf50;
+  color:white;
+  border:none;
+  border-radius:8px;
+}
 
-    button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 14px;
-      border: none;
-      background: #4caf50;
-      color: white;
-      font-weight: 700;
-      margin-top: 10px;
-      cursor: pointer;
-    }
+.btn-secondary { background:#78909c; }
+.btn-danger { background:#ef5350; }
 
-    .section {
-      margin-top: 12px;
-      border-top: 1px solid #eef2ef;
-      padding-top: 10px;
-    }
-
-    .section-title {
-      font-weight: 800;
-      color: #2e7d32;
-      margin-bottom: 6px;
-    }
-
-    .header {
-      font-weight: 800;
-      font-size: 18px;
-      margin-bottom: 6px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 6px;
-      margin-top: 10px;
-    }
-
-    .btn-secondary { background: #78909c; }
-    .btn-danger { background: #ef5350; }
-  </style>
+.actions {
+  display:flex;
+  gap:5px;
+}
+</style>
 </head>
 
 <body>
 
-<h1>🌿 Mon itinéraire</h1>
+<h1>Mon itinéraire</h1>
 
 <div class="card">
+<input id="startDate" type="date">
+<input id="stepInput" placeholder="Étape">
+<input id="km" placeholder="km">
+<input id="duration" placeholder="durée">
 
-  <div class="section">
-    <div class="section-title">📍 Étape</div>
-    <input id="startDate" type="date">
-    <input id="stepInput" placeholder="Étape">
-    <input id="km" placeholder="Kilomètres">
-    <input id="duration" placeholder="Durée">
-  </div>
-
-  <div class="section">
-    <div class="section-title">🚗 Déplacement</div>
-    <input id="transport" placeholder="Transport">
-    <input id="transportPrice" placeholder="Prix transport (€)">
-  </div>
-
-  <div class="section">
-    <div class="section-title">🏨 Hébergement</div>
-    <input id="hotelName" placeholder="Nom de l’hébergement">
-    <input id="hotelAddress" placeholder="Adresse">
-    <input id="hotelPrice" placeholder="Prix (€)">
-  </div>
-
-  <div class="section">
-    <div class="section-title">📋 Infos</div>
-    <textarea id="things" placeholder="Choses à voir"></textarea>
-    <textarea id="comments" placeholder="Commentaires"></textarea>
-  </div>
-
-  <button onclick="addStep()">Ajouter une étape</button>
-
+<button id="mainBtn" onclick="addOrSave()">Ajouter une étape</button>
 </div>
 
-<div class="card">
-  <div class="section-title">📊 Totaux</div>
+<div id="list"></div>
 
+<script>
+let steps = [];
+let editingIndex = null;
+
+/* ✅ bouton intelligent */
+function addOrSave() {
+  if (editingIndex === null) {
+    addStep();
+  } else {
+    saveEdit();
+  }
+}
+
+/* ✅ ajout normal */
+function addStep() {
+  const step = document.getElementById("stepInput").value;
+
+  if (!step) return;
+
+  steps.push({
+    step: step,
+    km: document.getElementById("km").value
+  });
+
+  clearForm();
+  render();
+}
+
+/* ✅ MODE EDIT */
+function editStep(i) {
+  const s = steps[i];
+
+  document.getElementById("stepInput").value = s.step;
+  document.getElementById("km").value = s.km;
+
+  editingIndex = i;
+
+  document.getElementById("mainBtn").innerText = "💾 Sauvegarder";
+}
+
+/* ✅ SAUVEGARDE */
+function saveEdit() {
+  steps[editingIndex] = {
+    step: document.getElementById("stepInput").value,
+    km: document.getElementById("km").value
+  };
+
+  editingIndex = null;
+
+  document.getElementById("mainBtn").innerText = "Ajouter une étape";
+
+  clearForm();
+  render();
+}
+
+/* ✅ DELETE */
+function deleteStep(i) {
+  steps.splice(i,1);
+  render();
+}
+
+function clearForm() {
+  document.getElementById("stepInput").value = "";
+  document.getElementById("km").value = "";
+}
+
+/* ✅ RENDER */
+function render() {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  steps.forEach((s,i)=> {
+    list.innerHTML += `
+      <div class="card">
+        <b>${s.step}</b> (${s.km})
+
+        <div class="actions">
+          <button class="btn-secondary" onclick="editStep(${i})">Modifier</button>
+          <button class="btn-danger" onclick="deleteStep(${i})">Supprimer</button>
+        </div>
+      </div>
+    `;
+  });
+}
+</script>
+
+</body>
+</html>

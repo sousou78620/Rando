@@ -5,7 +5,7 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ SUPER IMPORTANT -->
+  <!-- ✅ ICI LA VRAIE CORRECTION -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -39,7 +39,6 @@
       border-radius: 12px;
       border: 1px solid #d9e8dc;
       background: #f8fbf9;
-      font-family: 'Nunito', sans-serif;
     }
 
     button {
@@ -63,27 +62,12 @@
     .section-title {
       font-weight: 800;
       color: #2e7d32;
-      margin-bottom: 6px;
     }
 
     .header {
       font-weight: 800;
       font-size: 18px;
-      margin-bottom: 6px;
     }
-
-    .line {
-      margin: 3px 0;
-    }
-
-    .actions {
-      display: flex;
-      gap: 6px;
-      margin-top: 10px;
-    }
-
-    .btn-secondary { background: #78909c; }
-    .btn-danger { background: #ef5350; }
   </style>
 </head>
 
@@ -104,127 +88,54 @@
   <div class="section">
     <div class="section-title">🚗 Déplacement</div>
     <input id="transport" placeholder="Transport">
-    <input id="transportPrice" placeholder="Prix transport (€)">
+    <input id="transportPrice" placeholder="Prix transport">
   </div>
 
   <div class="section">
     <div class="section-title">🏨 Hébergement</div>
-    <input id="hotelName" placeholder="Nom de l’hébergement">
+    <input id="hotelName" placeholder="Nom">
     <input id="hotelAddress" placeholder="Adresse">
-    <input id="hotelPrice" placeholder="Prix (€)">
-  </div>
-
-  <div class="section">
-    <div class="section-title">📋 Infos</div>
-    <textarea id="things" placeholder="Choses à voir"></textarea>
-    <textarea id="comments" placeholder="Commentaires"></textarea>
+    <input id="hotelPrice" placeholder="Prix">
   </div>
 
   <button onclick="addStep()">Ajouter une étape</button>
 
 </div>
 
-<div class="card">
-  <div class="section-title">📊 Totaux</div>
-  Km total : <b id="totalKm">0</b><br>
-  Budget total : <b id="totalPrice">0</b> €
-</div>
-
 <div id="list"></div>
 
 <script>
-let steps = JSON.parse(localStorage.getItem("steps") || "[]");
-let editingIndex = null;
-
-function save() {
-  localStorage.setItem("steps", JSON.stringify(steps));
-}
+let steps = [];
 
 function addStep() {
-  const newStep = {
-    startDate: document.getElementById("startDate").value,
-    step: document.getElementById("stepInput").value,
-    km: parseFloat(document.getElementById("km").value) || 0,
-    duration: document.getElementById("duration").value,
-    transport: document.getElementById("transport").value,
-    transportPrice: parseFloat(document.getElementById("transportPrice").value) || 0,
-    hotelName: document.getElementById("hotelName").value,
-    hotelAddress: document.getElementById("hotelAddress").value,
-    hotelPrice: parseFloat(document.getElementById("hotelPrice").value) || 0,
-    things: document.getElementById("things").value,
-    comments: document.getElementById("comments").value
-  };
+  const stepValue = document.getElementById("stepInput").value;
 
-  if (!newStep.step) {
-    alert("Merci de renseigner une étape 😉");
+  if (!stepValue) {
+    alert("Ajoute une étape 😉");
     return;
   }
 
-  steps.push(newStep);
-  save();
+  steps.push({
+    step: stepValue
+  });
+
   render();
-
-  document.querySelectorAll("input, textarea").forEach(e => e.value = "");
-}
-
-function deleteStep(i) {
-  steps.splice(i, 1);
-  save();
-  render();
-}
-
-function editStep(i) {
-  editingIndex = i;
-  render();
-}
-
-function saveEdit(i) {
-  const c = document.getElementById("edit-" + i);
-
-  steps[i] = {
-    startDate: c.querySelector("input[type=date]").value,
-    step: c.querySelectorAll("input")[1].value,
-    km: parseFloat(c.querySelectorAll("input")[2].value) || 0,
-    duration: c.querySelectorAll("input")[3].value,
-    transport: c.querySelectorAll("input")[4].value,
-    transportPrice: parseFloat(c.querySelectorAll("input")[5].value) || 0,
-    hotelName: c.querySelectorAll("input")[6].value,
-    hotelAddress: c.querySelectorAll("input")[7].value,
-    hotelPrice: parseFloat(c.querySelectorAll("input")[8].value) || 0,
-    things: c.querySelectorAll("textarea")[0].value,
-    comments: c.querySelectorAll("textarea")[1].value
-  };
-
-  editingIndex = null;
-  save();
-  render();
-}
-
-function formatDateFR(d) {
-  return d ? new Date(d).toLocaleDateString("fr-FR") : "";
+  document.getElementById("stepInput").value = "";
 }
 
 function render() {
   const list = document.getElementById("list");
   list.innerHTML = "";
 
-  let totalKm = 0;
-  let totalPrice = 0;
-
-  steps.forEach((s, i) => {
-
-    totalKm += s.km;
-    totalPrice += s.transportPrice + s.hotelPrice;
-
+  steps.forEach(s => {
     list.innerHTML += `
       <div class="card">
+        <div class="header">${s.step}</div>
+      </div>
+    `;
+  });
+}
+</script>
 
-        <div class="header">${formatDateFR(s.startDate)} — ${s.step}</div>
-
-        <div class="section">
-          <div class="section-title">📍 Étape</div>
-          <div class="line">Kilomètres : ${s.km}</div>
-          <div class="line">Durée : ${s.duration}</div>
-        </div>
-
-        <div class="section">
+</body>
+</html>

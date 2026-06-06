@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,16 +12,19 @@
       padding: 16px;
       background: #f5f5f5;
     }
+
     h1 {
       text-align: center;
     }
+
     .card {
       background: white;
       padding: 12px;
       border-radius: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
+
     input, textarea {
       width: 100%;
       padding: 8px;
@@ -28,6 +32,7 @@
       border-radius: 8px;
       border: 1px solid #ccc;
     }
+
     button {
       width: 100%;
       padding: 10px;
@@ -37,6 +42,12 @@
       color: white;
       font-weight: bold;
       cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .small {
+      font-size: 12px;
+      color: gray;
     }
   </style>
 </head>
@@ -45,14 +56,21 @@
 
 <h1>☀️ Mon itinéraire</h1>
 
+<!-- FORMULAIRE -->
 <div class="card">
-  <input id="date" placeholder="Date">
-  <input id="location" placeholder="Lieu / étape">
-  <input id="hotel" placeholder="Hôtel">
-  <textarea id="notes" placeholder="Notes"></textarea>
-  <button onclick="addStep()">Ajouter</button>
+
+  <input id="startDate" type="date" placeholder="Date début">
+  <input id="endDate" type="date" placeholder="Date fin">
+  <input id="step" placeholder="Étape (ex: Paris → Lyon)">
+  <input id="km" placeholder="Kilomètres">
+  <input id="duration" placeholder="Durée (ex: 3h)">
+  <input id="price" placeholder="Prix (€)">
+  <textarea id="comments" placeholder="Commentaires"></textarea>
+
+  <button onclick="addStep()">Ajouter une étape</button>
 </div>
 
+<!-- LISTE -->
 <div id="list"></div>
 
 <script>
@@ -64,35 +82,51 @@
 
   function addStep() {
     const step = {
-      date: document.getElementById("date").value,
-      location: document.getElementById("location").value,
-      hotel: document.getElementById("hotel").value,
-      notes: document.getElementById("notes").value
+      startDate: document.getElementById("startDate").value,
+      endDate: document.getElementById("endDate").value,
+      step: document.getElementById("step").value,
+      km: document.getElementById("km").value,
+      duration: document.getElementById("duration").value,
+      price: document.getElementById("price").value,
+      comments: document.getElementById("comments").value
     };
 
-    if (!step.location) return;
+    if (!step.step) return;
 
     steps.push(step);
     save();
     render();
 
-    document.getElementById("date").value = "";
-    document.getElementById("location").value = "";
-    document.getElementById("hotel").value = "";
-    document.getElementById("notes").value = "";
+    document.getElementById("startDate").value = "";
+    document.getElementById("endDate").value = "";
+    document.getElementById("step").value = "";
+    document.getElementById("km").value = "";
+    document.getElementById("duration").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("comments").value = "";
+  }
+
+  function deleteStep(index) {
+    steps.splice(index, 1);
+    save();
+    render();
   }
 
   function render() {
     const list = document.getElementById("list");
     list.innerHTML = "";
 
-    steps.forEach(s => {
+    steps.forEach((s, i) => {
       list.innerHTML += `
         <div class="card">
-          <b>${s.date}</b><br>
-          📍 ${s.location}<br>
-          🏨 ${s.hotel}<br>
-          <small>${s.notes}</small>
+          <b>${s.startDate} → ${s.endDate}</b><br>
+          📍 ${s.step}<br>
+          🚗 ${s.km} km<br>
+          ⏱️ ${s.duration}<br>
+          💰 ${s.price} €<br>
+          <div class="small">${s.comments}</div>
+          <br>
+          <button onclick="deleteStep(${i})">🗑️ Supprimer</button>
         </div>
       `;
     });

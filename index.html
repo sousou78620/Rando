@@ -5,7 +5,7 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ CORRECT -->
+  <!-- ✅ FIX CORRECT -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -21,6 +21,7 @@
       color: #2e7d32;
       font-weight: 800;
       font-size: 26px;
+      margin-bottom: 15px;
     }
 
     .card {
@@ -50,7 +51,6 @@
       color: white;
       font-weight: 700;
       margin-top: 10px;
-      font-size: 15px;
       cursor: pointer;
     }
 
@@ -64,29 +64,22 @@
       font-weight: 800;
       color: #2e7d32;
       margin-bottom: 6px;
-      font-size: 16px;
     }
 
     .header {
       font-weight: 800;
       font-size: 18px;
-      color: #1b5e20;
       margin-bottom: 6px;
     }
 
     .actions {
       display: flex;
       gap: 6px;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     .btn-secondary { background: #78909c; }
     .btn-danger { background: #ef5350; }
-
-    .totals {
-      position: sticky;
-      top: 10px;
-    }
   </style>
 </head>
 
@@ -94,8 +87,40 @@
 
 <h1>🌿 Mon itinéraire</h1>
 
+<!-- FORM -->
 <div class="card">
 
   <div class="section">
     <div class="section-title">📍 Étape</div>
     <input id="startDate" type="date">
+    <input id="stepInput" placeholder="Étape">
+    <input id="km" placeholder="Kilomètres">
+    <input id="duration" placeholder="Durée">
+  </div>
+
+  <div class="section">
+    <div class="section-title">🚗 Déplacement</div>
+    <input id="transport" placeholder="Transport">
+    <input id="transportPrice" placeholder="Prix transport (€)">
+  </div>
+
+  <div class="section">
+    <div class="section-title">🏨 Hébergement</div>
+    <input id="hotelName" placeholder="Nom de l’hébergement">
+    <input id="hotelAddress" placeholder="Adresse">
+    <input id="hotelPrice" placeholder="Prix (€)">
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 Infos</div>
+    <textarea id="things" placeholder="Choses à voir"></textarea>
+    <textarea id="comments" placeholder="Commentaires"></textarea>
+  </div>
+
+  <button onclick="addStep()">Ajouter une étape</button>
+
+</div>
+
+<!-- TOTALS -->
+<div class="card">
+  <div class="section-title">📊 Totaux</div>

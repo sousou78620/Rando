@@ -5,7 +5,7 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ FONT CORRECTE -->
+  <!-- ✅ LIGNE CORRECTE (important !) -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -90,7 +90,7 @@
 <div class="card">
 
   <div class="section">
-    <div class="section-title">Étape</div>
+    <div class="section-title">📍 Étape</div>
     <input id="startDate" type="date">
     <input id="stepInput" placeholder="Étape">
     <input id="km" placeholder="Kilomètres">
@@ -98,20 +98,20 @@
   </div>
 
   <div class="section">
-    <div class="section-title">Déplacement</div>
+    <div class="section-title">🚗 Déplacement</div>
     <input id="transport" placeholder="Transport">
     <input id="transportPrice" placeholder="Prix transport (€)">
   </div>
 
   <div class="section">
-    <div class="section-title">Hébergement</div>
+    <div class="section-title">🏨 Hébergement</div>
     <input id="hotelName" placeholder="Nom de l’hébergement">
     <input id="hotelAddress" placeholder="Adresse">
     <input id="hotelPrice" placeholder="Prix (€)">
   </div>
 
   <div class="section">
-    <div class="section-title">Infos</div>
+    <div class="section-title">📋 Infos</div>
     <textarea id="things" placeholder="Choses à voir"></textarea>
     <textarea id="comments" placeholder="Commentaires"></textarea>
   </div>
@@ -121,9 +121,9 @@
 </div>
 
 <div class="card">
-  <div class="section-title">Totaux</div>
-  Km total : <b id="totalKm">0</b><br>
-  Budget total : <b id="totalPrice">0</b> €
+  <div class="section-title">📊 Totaux</div>
+  🚗 Km total : <b id="totalKm">0</b><br>
+  💰 Budget total : <b id="totalPrice">0</b> €
 </div>
 
 <div id="list"></div>
@@ -215,27 +215,27 @@ function render() {
         <div class="header">${formatDateFR(s.startDate)} — ${s.step}</div>
 
         <div class="section">
-          <div class="section-title">Étape</div>
-          ${s.km} km • ${s.duration}
+          <div class="section-title">📍 Étape</div>
+          🚗 ${s.km} km • ⏱️ ${s.duration}
         </div>
 
         <div class="section">
-          <div class="section-title">Déplacement</div>
-          ${s.transport}<br>
-          ${s.transportPrice} €
+          <div class="section-title">🚗 Déplacement</div>
+          🚆 ${s.transport}<br>
+          💰 ${s.transportPrice} €
         </div>
 
         <div class="section">
-          <div class="section-title">Hébergement</div>
-          ${s.hotelName}<br>
-          ${s.hotelAddress}<br>
-          ${s.hotelPrice} €
+          <div class="section-title">🏨 Hébergement</div>
+          🏨 ${s.hotelName}<br>
+          📍 ${s.hotelAddress}<br>
+          💰 ${s.hotelPrice} €
         </div>
 
         <div class="section">
-          <div class="section-title">Infos</div>
-          ${s.things}<br>
-          ${s.comments}
+          <div class="section-title">📋 Infos</div>
+          👀 ${s.things}<br>
+          📝 ${s.comments}
         </div>
 
         <div class="actions">

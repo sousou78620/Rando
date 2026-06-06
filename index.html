@@ -5,7 +5,7 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ VERSION CORRECTE -->
+  <!-- ✅ CORRECT -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -72,6 +72,10 @@
       margin-bottom: 6px;
     }
 
+    .line {
+      margin: 3px 0;
+    }
+
     .actions {
       display: flex;
       gap: 6px;
@@ -122,8 +126,8 @@
 
 <div class="card">
   <div class="section-title">📊 Totaux</div>
-  🚗 Km total : <b id="totalKm">0</b><br>
-  💰 Budget total : <b id="totalPrice">0</b> €
+  Km total : <b id="totalKm">0</b><br>
+  Budget total : <b id="totalPrice">0</b> €
 </div>
 
 <div id="list"></div>
@@ -152,130 +156,3 @@ function addStep() {
   };
 
   if (!newStep.step) {
-    alert("Merci de renseigner une étape 😉");
-    return;
-  }
-
-  steps.push(newStep);
-  save();
-  render();
-
-  document.querySelectorAll("input, textarea").forEach(e => e.value = "");
-}
-
-function deleteStep(i) {
-  steps.splice(i, 1);
-  save();
-  render();
-}
-
-function editStep(i) {
-  editingIndex = i;
-  render();
-}
-
-function saveEdit(i) {
-  const c = document.getElementById("edit-" + i);
-
-  steps[i] = {
-    startDate: c.querySelector("input[type=date]").value,
-    step: c.querySelectorAll("input")[1].value,
-    km: parseFloat(c.querySelectorAll("input")[2].value) || 0,
-    duration: c.querySelectorAll("input")[3].value,
-    transport: c.querySelectorAll("input")[4].value,
-    transportPrice: parseFloat(c.querySelectorAll("input")[5].value) || 0,
-    hotelName: c.querySelectorAll("input")[6].value,
-    hotelAddress: c.querySelectorAll("input")[7].value,
-    hotelPrice: parseFloat(c.querySelectorAll("input")[8].value) || 0,
-    things: c.querySelectorAll("textarea")[0].value,
-    comments: c.querySelectorAll("textarea")[1].value
-  };
-
-  editingIndex = null;
-  save();
-  render();
-}
-
-function formatDateFR(d) {
-  return d ? new Date(d).toLocaleDateString("fr-FR") : "";
-}
-
-function render() {
-  const list = document.getElementById("list");
-  list.innerHTML = "";
-
-  let totalKm = 0;
-  let totalPrice = 0;
-
-  steps.forEach((s, i) => {
-
-    totalKm += s.km;
-    totalPrice += s.transportPrice + s.hotelPrice;
-
-    if (editingIndex === i) {
-      list.innerHTML += `
-        <div class="card" id="edit-${i}">
-          <input type="date" value="${s.startDate}">
-          <input value="${s.step}">
-          <input value="${s.km}">
-          <input value="${s.duration}">
-          <input value="${s.transport}">
-          <input value="${s.transportPrice}">
-          <input value="${s.hotelName}">
-          <input value="${s.hotelAddress}">
-          <input value="${s.hotelPrice}">
-          <textarea>${s.things}</textarea>
-          <textarea>${s.comments}</textarea>
-          <button onclick="saveEdit(${i})">💾 Sauvegarder</button>
-        </div>
-      `;
-    } else {
-      list.innerHTML += `
-        <div class="card">
-
-          <div class="header">${formatDateFR(s.startDate)} — ${s.step}</div>
-
-          <div class="section">
-            <div class="section-title">📍 Étape</div>
-            🚗 ${s.km} km • ⏱️ ${s.duration}
-          </div>
-
-          <div class="section">
-            <div class="section-title">🚗 Déplacement</div>
-            🚆 ${s.transport}<br>
-            💰 ${s.transportPrice} €
-          </div>
-
-          <div class="section">
-            <div class="section-title">🏨 Hébergement</div>
-            🏨 ${s.hotelName}<br>
-            📍 ${s.hotelAddress}<br>
-            💰 ${s.hotelPrice} €
-          </div>
-
-          <div class="section">
-            <div class="section-title">📋 Infos</div>
-            👀 ${s.things}<br>
-            📝 ${s.comments}
-          </div>
-
-          <div class="actions">
-            <button class="btn-secondary" onclick="editStep(${i})">Modifier</button>
-            <button class="btn-danger" onclick="deleteStep(${i})">Supprimer</button>
-          </div>
-
-        </div>
-      `;
-    }
-
-  });
-
-  document.getElementById("totalKm").innerText = totalKm;
-  document.getElementById("totalPrice").innerText = totalPrice;
-}
-
-render();
-</script>
-
-</body>
-</html>

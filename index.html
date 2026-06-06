@@ -2,100 +2,60 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Itinéraire Vacances</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- ✅ ICI LA VRAIE CORRECTION -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
-
-  <style>
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: #eef5f0;
-      padding: 14px;
-      margin: 0;
-    }
-
-    h1 {
-      text-align: center;
-      color: #2e7d32;
-      font-weight: 800;
-      font-size: 26px;
-      margin-bottom: 15px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 14px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 8px;
-      border-radius: 12px;
-      border: 1px solid #d9e8dc;
-      background: #f8fbf9;
+  <title>Itinéraire 8px;  <title>Itinéraire Vacances</title>
+      margin-bottom: 6px;
     }
 
     button {
       width: 100%;
-      padding: 12px;
-      border-radius: 14px;
-      border: none;
-      background: #4caf50;
+      padding: 10px;
+      background: green;
       color: white;
-      font-weight: 700;
-      margin-top: 10px;
-      cursor: pointer;
+      border: none;
     }
 
     .section {
-      margin-top: 12px;
-      border-top: 1px solid #eef2ef;
-      padding-top: 10px;
+      margin-top: 10px;
     }
 
     .section-title {
-      font-weight: 800;
-      color: #2e7d32;
-    }
-
-    .header {
-      font-weight: 800;
-      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 4px;
     }
   </style>
 </head>
 
 <body>
 
-<h1>🌿 Mon itinéraire</h1>
+<h1>Mon itinéraire</h1>
 
 <div class="card">
 
   <div class="section">
-    <div class="section-title">📍 Étape</div>
-    <input id="startDate" type="date">
-    <input id="stepInput" placeholder="Étape">
+    <div class="section-title">Étape</div>
+    <input id="date" type="date">
+    <input id="step" placeholder="Étape">
     <input id="km" placeholder="Kilomètres">
     <input id="duration" placeholder="Durée">
   </div>
 
   <div class="section">
-    <div class="section-title">🚗 Déplacement</div>
+    <div class="section-title">Déplacement</div>
     <input id="transport" placeholder="Transport">
     <input id="transportPrice" placeholder="Prix transport">
   </div>
 
   <div class="section">
-    <div class="section-title">🏨 Hébergement</div>
-    <input id="hotelName" placeholder="Nom">
+    <div class="section-title">Hébergement</div>
+    <input id="hotel" placeholder="Nom">
     <input id="hotelAddress" placeholder="Adresse">
     <input id="hotelPrice" placeholder="Prix">
+  </div>
+
+  <div class="section">
+    <div class="section-title">Infos</div>
+    <textarea id="things" placeholder="À voir"></textarea>
+    <textarea id="comments" placeholder="Commentaires"></textarea>
   </div>
 
   <button onclick="addStep()">Ajouter une étape</button>
@@ -108,19 +68,27 @@
 let steps = [];
 
 function addStep() {
-  const stepValue = document.getElementById("stepInput").value;
+  const newStep = {
+    date: document.getElementById("date").value,
+    step: document.getElementById("step").value,
+    km: document.getElementById("km").value,
+    duration: document.getElementById("duration").value,
+    transport: document.getElementById("transport").value,
+    transportPrice: document.getElementById("transportPrice").value,
+    hotel: document.getElementById("hotel").value,
+    hotelAddress: document.getElementById("hotelAddress").value,
+    hotelPrice: document.getElementById("hotelPrice").value,
+    things: document.getElementById("things").value,
+    comments: document.getElementById("comments").value
+  };
 
-  if (!stepValue) {
-    alert("Ajoute une étape 😉");
+  if (!newStep.step) {
+    alert("Ajoute une étape");
     return;
   }
 
-  steps.push({
-    step: stepValue
-  });
-
+  steps.push(newStep);
   render();
-  document.getElementById("stepInput").value = "";
 }
 
 function render() {
@@ -130,7 +98,30 @@ function render() {
   steps.forEach(s => {
     list.innerHTML += `
       <div class="card">
-        <div class="header">${s.step}</div>
+
+        <b>${s.date} - ${s.step}</b>
+
+        <div class="section">
+          Kilomètres : ${s.km}<br>
+          Durée : ${s.duration}
+        </div>
+
+        <div class="section">
+          Transport : ${s.transport}<br>
+          Prix transport : ${s.transportPrice}
+        </div>
+
+        <div class="section">
+          Hébergement : ${s.hotel}<br>
+          Adresse : ${s.hotelAddress}<br>
+          Prix : ${s.hotelPrice}
+        </div>
+
+        <div class="section">
+          À voir : ${s.things}<br>
+          Notes : ${s.comments}
+        </div>
+
       </div>
     `;
   });
@@ -139,3 +130,27 @@ function render() {
 
 </body>
 </html>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #eef5f0;
+      padding: 14px;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2e7d32;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 14px;
+      margin: 10px 0;
+    }
+
+    input, textarea {
+      width: 100%;

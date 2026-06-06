@@ -98,46 +98,23 @@
 
 <div class="card">
 
-  <input id="startDate" type="date">
-  <input id="step" placeholder="Étape">
+  <div class="section">
+    <div class="section-title">📍 Étape</div>
+    <input id="startDate" type="date">
+    <input id="step" placeholder="Étape">
+    <input id="km" placeholder="Kilomètres">
+    <input id="duration" placeholder="Durée">
+  </div>
 
   <div class="section">
     <div class="section-title">🚗 Déplacement</div>
-    <input id="km" placeholder="Kilomètres">
     <input id="transport" placeholder="Transport">
     <input id="transportPrice" placeholder="Prix transport (€)">
   </div>
 
   <div class="section">
-    <div class="section-title">🏨 Hébergement</div>
-    <input id="hotel" placeholder="Hôtel">
-    <input id="hotelPrice" placeholder="Prix hôtel (€)">
-  </div>
-
-  <div class="section">
-    <div class="section-title">📍 Infos</div>
-    <input id="duration" placeholder="Durée">
+    <div class="section-title">📋 Infos</div>
     <textarea id="things" placeholder="Choses à voir"></textarea>
     <textarea id="comments" placeholder="Commentaires"></textarea>
   </div>
 
-  <button onclick="addStep()">Ajouter une étape</button>
-</div>
-
-<div id="list"></div>
-
-<script>
-let steps = JSON.parse(localStorage.getItem("steps") || "[]");
-let editingIndex = null;
-
-function save() {
-  localStorage.setItem("steps", JSON.stringify(steps));
-}
-
-function addStep() {
-  const step = {
-    startDate: document.getElementById("startDate").value,
-    step: document.getElementById("step").value,
-    km: parseFloat(document.getElementById("km").value) || 0,
-    transport: document.getElementById("transport").value,
-    transportPrice: parseFloat(document.getElementById("transportPrice").value) || 0,

@@ -5,7 +5,7 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ CORRECT -->
+  <!-- ✅ SUPER IMPORTANT -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -156,3 +156,75 @@ function addStep() {
   };
 
   if (!newStep.step) {
+    alert("Merci de renseigner une étape 😉");
+    return;
+  }
+
+  steps.push(newStep);
+  save();
+  render();
+
+  document.querySelectorAll("input, textarea").forEach(e => e.value = "");
+}
+
+function deleteStep(i) {
+  steps.splice(i, 1);
+  save();
+  render();
+}
+
+function editStep(i) {
+  editingIndex = i;
+  render();
+}
+
+function saveEdit(i) {
+  const c = document.getElementById("edit-" + i);
+
+  steps[i] = {
+    startDate: c.querySelector("input[type=date]").value,
+    step: c.querySelectorAll("input")[1].value,
+    km: parseFloat(c.querySelectorAll("input")[2].value) || 0,
+    duration: c.querySelectorAll("input")[3].value,
+    transport: c.querySelectorAll("input")[4].value,
+    transportPrice: parseFloat(c.querySelectorAll("input")[5].value) || 0,
+    hotelName: c.querySelectorAll("input")[6].value,
+    hotelAddress: c.querySelectorAll("input")[7].value,
+    hotelPrice: parseFloat(c.querySelectorAll("input")[8].value) || 0,
+    things: c.querySelectorAll("textarea")[0].value,
+    comments: c.querySelectorAll("textarea")[1].value
+  };
+
+  editingIndex = null;
+  save();
+  render();
+}
+
+function formatDateFR(d) {
+  return d ? new Date(d).toLocaleDateString("fr-FR") : "";
+}
+
+function render() {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  let totalKm = 0;
+  let totalPrice = 0;
+
+  steps.forEach((s, i) => {
+
+    totalKm += s.km;
+    totalPrice += s.transportPrice + s.hotelPrice;
+
+    list.innerHTML += `
+      <div class="card">
+
+        <div class="header">${formatDateFR(s.startDate)} — ${s.step}</div>
+
+        <div class="section">
+          <div class="section-title">📍 Étape</div>
+          <div class="line">Kilomètres : ${s.km}</div>
+          <div class="line">Durée : ${s.duration}</div>
+        </div>
+
+        <div class="section">

@@ -22,13 +22,8 @@
       gap: 16px;
     }
 
-    .left {
-      flex: 2;
-    }
-
-    .right {
-      flex: 1;
-    }
+    .left { flex: 2; }
+    .right { flex: 1; }
 
     .card {
       background: white;
@@ -58,9 +53,8 @@
       margin-top: 5px;
     }
 
-    .small {
-      font-size: 12px;
-      color: gray;
+    .secondary {
+      background: #666;
     }
 
     @media (max-width: 768px) {
@@ -81,7 +75,6 @@
   <div class="left">
 
     <div class="card">
-
       <input id="startDate" type="date">
       <input id="step" placeholder="Étape">
       <input id="km" placeholder="Kilomètres">
@@ -105,84 +98,3 @@
 
   <!-- DROITE -->
   <div class="right">
-    <div class="card">
-      <h3>📊 Totaux</h3>
-      <p>🚗 Total km : <b id="totalKm">0</b></p>
-      <p>💰 Total budget : <b id="totalPrice">0</b> €</p>
-    </div>
-  </div>
-
-</div>
-
-<script>
-  let steps = JSON.parse(localStorage.getItem("steps") || "[]");
-
-  function save() {
-    localStorage.setItem("steps", JSON.stringify(steps));
-  }
-
-  function addStep() {
-    const step = {
-      startDate: document.getElementById("startDate").value,
-      step: document.getElementById("step").value,
-      km: parseFloat(document.getElementById("km").value) || 0,
-      transport: document.getElementById("transport").value,
-      transportPrice: parseFloat(document.getElementById("transportPrice").value) || 0,
-      hotel: document.getElementById("hotel").value,
-      hotelPrice: parseFloat(document.getElementById("hotelPrice").value) || 0,
-      duration: document.getElementById("duration").value,
-      things: document.getElementById("things").value,
-      comments: document.getElementById("comments").value
-    };
-
-    if (!step.step) return;
-
-    steps.push(step);
-    save();
-    render();
-
-    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
-  }
-
-  function deleteStep(index) {
-    steps.splice(index, 1);
-    save();
-    render();
-  }
-
-  function render() {
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-
-    let totalKm = 0;
-    let totalPrice = 0;
-
-    steps.forEach((s, i) => {
-      totalKm += s.km;
-      totalPrice += s.transportPrice + s.hotelPrice;
-
-      list.innerHTML += `
-        <div class="card">
-          <b>${s.startDate}</b><br>
-          📍 ${s.step}<br>
-          🚗 ${s.km} km<br>
-          🚆 ${s.transport} (${s.transportPrice} €)<br>
-          🏨 ${s.hotel} (${s.hotelPrice} €)<br>
-          ⏱️ ${s.duration}<br>
-          👀 ${s.things}<br>
-          <div class="small">${s.comments}</div>
-          <br>
-          <button onclick="deleteStep(${i})">🗑️ Supprimer</button>
-        </div>
-      `;
-    });
-
-    document.getElementById("totalKm").innerText = totalKm;
-    document.getElementById("totalPrice").innerText = totalPrice;
-  }
-
-  render();
-</script>
-
-</body>
-</html>

@@ -7,65 +7,34 @@
 
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 16px;
+      font-family: Arial;
       background: #f5f5f5;
+      padding: 16px;
     }
 
-    h1 {
-      text-align: center;
-    }
-
-    .container {
-      display: flex;
-      gap: 16px;
-    }
-
-    .left { flex: 2; }
-    .right { flex: 1; }
+    h1 { text-align: center; }
 
     .card {
       background: white;
       padding: 12px;
       border-radius: 12px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin: 10px 0;
     }
 
     input, textarea {
       width: 100%;
-      padding: 8px;
       margin-bottom: 6px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      padding: 8px;
     }
 
     button {
       width: 100%;
+      margin-top: 5px;
       padding: 8px;
-      border: none;
-      border-radius: 10px;
       background: #0070f3;
       color: white;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 5px;
-    }
-
-    .secondary {
-      background: #666;
-    }
-
-    .small {
-      font-size: 12px;
-      color: gray;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
+      border: none;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -74,165 +43,97 @@
 
 <h1>☀️ Mon itinéraire</h1>
 
-<div class="container">
+<div class="card">
+  <input id="startDate" type="date">
+  <input id="step" placeholder="Étape">
+  <input id="km" placeholder="Kilomètres">
 
-  <!-- FORMULAIRE -->
-  <div class="left">
+  <input id="transport" placeholder="Transport">
+  <input id="transportPrice" placeholder="Prix transport">
 
-    <div class="card">
-      <input id="startDate" type="date">
-      <input id="step" placeholder="Étape">
-      <input id="km" placeholder="Kilomètres">
+  <input id="hotel" placeholder="Hôtel">
+  <input id="hotelPrice" placeholder="Prix hôtel">
 
-      <input id="transport" placeholder="Transport">
-      <input id="transportPrice" placeholder="Prix transport (€)">
+  <input id="duration" placeholder="Durée">
+  <textarea id="things" placeholder="Choses à voir"></textarea>
+  <textarea id="comments" placeholder="Commentaires"></textarea>
 
-      <input id="hotel" placeholder="Hôtel">
-      <input id="hotelPrice" placeholder="Prix hôtel (€)">
-
-      <input id="duration" placeholder="Durée">
-      <textarea id="things" placeholder="Choses à voir"></textarea>
-      <textarea id="comments" placeholder="Commentaires"></textarea>
-
-      <button onclick="addStep()">Ajouter une étape</button>
-    </div>
-
-    <div id="list"></div>
-
-  </div>
-
-  <!-- TOTAUX -->
-  <div class="right">
-    <div class="card">
-      <h3>📊 Totaux</h3>
-      <p>🚗 Total km : <b id="totalKm">0</b></p>
-      <p>💰 Total budget : <b id="totalPrice">0</b> €</p>
-    </div>
-  </div>
-
+  <button onclick="addStep()">Ajouter</button>
 </div>
 
+<div id="list"></div>
+
 <script>
-  let steps = JSON.parse(localStorage.getItem("steps") || "[]");
-  let editingIndex = null;
+let steps = JSON.parse(localStorage.getItem("steps") || "[]");
+let editingIndex = null;
 
-  function formatDateFR(dateStr) {
-    if (!dateStr) return "";
-    return new Date(dateStr).toLocaleDateString("fr-FR");
-  }
+function save() {
+  localStorage.setItem("steps", JSON.stringify(steps));
+}
 
-  function save() {
-    localStorage.setItem("steps", JSON.stringify(steps));
-  }
+function addStep() {
+  const step = {
+    startDate: document.getElementById("startDate").value,
+    step: document.getElementById("step").value,
+    km: parseFloat(document.getElementById("km").value) || 0,
+    transport: document.getElementById("transport").value,
+    transportPrice: parseFloat(document.getElementById("transportPrice").value) || 0,
+    hotel: document.getElementById("hotel").value,
+    hotelPrice: parseFloat(document.getElementById("hotelPrice").value) || 0,
+    duration: document.getElementById("duration").value,
+    things: document.getElementById("things").value,
+    comments: document.getElementById("comments").value
+  };
 
-  function addStep() {
-    const step = {
-      startDate: document.getElementById("startDate").value,
-      step: document.getElementById("step").value,
-      km: parseFloat(document.getElementById("km").value) || 0,
-      transport: document.getElementById("transport").value,
-      transportPrice: parseFloat(document.getElementById("transportPrice").value) || 0,
-      hotel: document.getElementById("hotel").value,
-      hotelPrice: parseFloat(document.getElementById("hotelPrice").value) || 0,
-      duration: document.getElementById("duration").value,
-      things: document.getElementById("things").value,
-      comments: document.getElementById("comments").value
-    };
+  if (!step.step) return;
 
-    if (!step.step) return;
-
-    steps.push(step);
-    save();
-    render();
-
-    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
-  }
-
-  function deleteStep(index) {
-    steps.splice(index, 1);
-    save();
-    render();
-  }
-
-  function startEdit(index) {
-    editingIndex = index;
-    render();
-  }
-
-  function saveEdit(index) {
-    const card = document.getElementById("edit-" + index);
-
-    steps[index] = {
-      startDate: card.querySelector(".startDate").value,
-      step: card.querySelector(".step").value,
-      km: parseFloat(card.querySelector(".km").value) || 0,
-      transport: card.querySelector(".transport").value,
-      transportPrice: parseFloat(card.querySelector(".transportPrice").value) || 0,
-      hotel: card.querySelector(".hotel").value,
-      hotelPrice: parseFloat(card.querySelector(".hotelPrice").value) || 0,
-      duration: card.querySelector(".duration").value,
-      things: card.querySelector(".things").value,
-      comments: card.querySelector(".comments").value
-    };
-
-    editingIndex = null;
-    save();
-    render();
-  }
-
-  function render() {
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-
-    let totalKm = 0;
-    let totalPrice = 0;
-
-    steps.forEach((s, i) => {
-      totalKm += s.km;
-      totalPrice += s.transportPrice + s.hotelPrice;
-
-      if (editingIndex === i) {
-        list.innerHTML += `
-          <div class="card" id="edit-${i}">
-            <input class="startDate" type="date" value="${s.startDate}">
-            <input class="step" value="${s.step}">
-            <input class="km" value="${s.km}">
-            <input class="transport" value="${s.transport}">
-            <input class="transportPrice" value="${s.transportPrice}">
-            <input class="hotel" value="${s.hotel}">
-            <input class="hotelPrice" value="${s.hotelPrice}">
-            <input class="duration" value="${s.duration}">
-            <textarea class="things">${s.things}</textarea>
-            <textarea class="comments">${s.comments}</textarea>
-
-            <button onclick="saveEdit(${i})">💾 Sauvegarder</button>
-          </div>
-        `;
-      } else {
-        list.innerHTML += `
-          <div class="card">
-            <b>${formatDateFR(s.startDate)}</b><br>
-            📍 ${s.step}<br>
-            🚗 ${s.km} km<br>
-            🚆 ${s.transport} (${s.transportPrice} €)<br>
-            🏨 ${s.hotel} (${s.hotelPrice} €)<br>
-            ⏱️ ${s.duration}<br>
-            👀 ${s.things}<br>
-            <div class="small">${s.comments}</div>
-            <br>
-            <button onclick="startEdit(${i})" class="secondary">✏️ Modifier</button>
-            <button onclick="deleteStep(${i})">🗑️ Supprimer</button>
-          </div>
-        `;
-      }
-    });
-
-    document.getElementById("totalKm").innerText = totalKm;
-    document.getElementById("totalPrice").innerText = totalPrice;
-  }
-
+  steps.push(step);
+  save();
   render();
-</script>
 
-</body>
-</html>
+  document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+}
+
+function deleteStep(i) {
+  steps.splice(i, 1);
+  save();
+  render();
+}
+
+function editStep(i) {
+  editingIndex = i;
+  render();
+}
+
+function saveEdit(i) {
+  const container = document.getElementById("edit-" + i);
+
+  steps[i] = {
+    startDate: container.querySelector("input[type=date]").value,
+    step: container.querySelectorAll("input")[1].value,
+    km: parseFloat(container.querySelectorAll("input")[2].value) || 0,
+    transport: container.querySelectorAll("input")[3].value,
+    transportPrice: parseFloat(container.querySelectorAll("input")[4].value) || 0,
+    hotel: container.querySelectorAll("input")[5].value,
+    hotelPrice: parseFloat(container.querySelectorAll("input")[6].value) || 0,
+    duration: container.querySelectorAll("input")[7].value,
+    things: container.querySelectorAll("textarea")[0].value,
+    comments: container.querySelectorAll("textarea")[1].value
+  };
+
+  editingIndex = null;
+  save();
+  render();
+}
+
+function formatDateFR(d) {
+  if (!d) return "";
+  return new Date(d).toLocaleDateString("fr-FR");
+}
+
+function render() {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  steps.forEach((s, i) => {
+

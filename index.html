@@ -5,6 +5,7 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- ✅ FIX ICI -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -41,13 +42,15 @@
 
     button {
       width: 100%;
-      padding: 10px;
-      border-radius: 12px;
+      padding: 12px;
+      border-radius: 14px;
       border: none;
       background: #4caf50;
       color: white;
       font-weight: 700;
-      margin-top: 8px;
+      margin-top: 10px;
+      font-size: 15px;
+      cursor: pointer;
     }
 
     .section {
@@ -60,12 +63,14 @@
       font-weight: 800;
       color: #2e7d32;
       margin-bottom: 6px;
+      font-size: 16px;
     }
 
     .header {
       font-weight: 800;
       font-size: 18px;
       color: #1b5e20;
+      margin-bottom: 6px;
     }
 
     .actions {
@@ -117,3 +122,70 @@
     <textarea id="comments" placeholder="Commentaires"></textarea>
   </div>
 
+  <!-- ✅ TON BOUTON EST ICI -->
+  <button onclick="addStep()">Ajouter une étape</button>
+
+</div>
+
+<div class="card totals">
+  <h3>📊 Totaux</h3>
+  <div>🚗 Km total : <b id="totalKm">0</b></div>
+  <div>💰 Budget total : <b id="totalPrice">0</b> €</div>
+</div>
+
+<div id="list"></div>
+
+<script>
+let steps = JSON.parse(localStorage.getItem("steps") || "[]");
+let editingIndex = null;
+
+function save() {
+  localStorage.setItem("steps", JSON.stringify(steps));
+}
+
+function addStep() {
+  const newStep = {
+    startDate: document.getElementById("startDate").value,
+    step: document.getElementById("stepInput").value,
+    km: parseFloat(document.getElementById("km").value) || 0,
+    duration: document.getElementById("duration").value,
+    transport: document.getElementById("transport").value,
+    transportPrice: parseFloat(document.getElementById("transportPrice").value) || 0,
+    hotelName: document.getElementById("hotelName").value,
+    hotelAddress: document.getElementById("hotelAddress").value,
+    hotelPrice: parseFloat(document.getElementById("hotelPrice").value) || 0,
+    things: document.getElementById("things").value,
+    comments: document.getElementById("comments").value
+  };
+
+  if (!newStep.step) return;
+
+  steps.push(newStep);
+  save();
+  render();
+
+  document.querySelectorAll("input, textarea").forEach(e => e.value = "");
+}
+
+function deleteStep(i) {
+  steps.splice(i, 1);
+  save();
+  render();
+}
+
+function editStep(i) {
+  editingIndex = i;
+  render();
+}
+
+function saveEdit(i) {
+  const c = document.getElementById("edit-" + i);
+
+  steps[i] = {
+    startDate: c.querySelector("input[type=date]").value,
+    step: c.querySelectorAll("input")[1].value,
+    km: parseFloat(c.querySelectorAll("input")[2].value) || 0,
+    duration: c.querySelectorAll("input")[3].value,
+    transport: c.querySelectorAll("input")[4].value,
+    transportPrice: parseFloat(c.querySelectorAll("input")[5].value) || 0,
+    hotelName: c.querySelectorAll("input")[6].value,

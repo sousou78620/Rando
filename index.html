@@ -5,7 +5,7 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ CORRECTION ABSOLUE -->
+  <!-- ✅ police correcte -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -87,6 +87,7 @@
 
 <h1>🌿 Mon itinéraire</h1>
 
+<!-- FORMULAIRE -->
 <div class="card">
 
   <div class="section">
@@ -116,11 +117,18 @@
     <textarea id="comments" placeholder="Commentaires"></textarea>
   </div>
 
-  <!-- ✅ BOUTON -->
   <button onclick="addStep()">Ajouter une étape</button>
 
 </div>
 
+<!-- TOTAUX -->
+<div class="card">
+  <div class="section-title">📊 Totaux</div>
+  🚗 Km total : <b id="totalKm">0</b><br>
+  💰 Budget total : <b id="totalPrice">0</b> €
+</div>
+
+<!-- LISTE -->
 <div id="list"></div>
 
 <script>
@@ -199,7 +207,13 @@ function render() {
   const list = document.getElementById("list");
   list.innerHTML = "";
 
+  let totalKm = 0;
+  let totalPrice = 0;
+
   steps.forEach((s, i) => {
+
+    totalKm += s.km;
+    totalPrice += s.transportPrice + s.hotelPrice;
 
     if (editingIndex === i) {
       list.innerHTML += `
@@ -225,6 +239,8 @@ function render() {
           🚗 ${s.km} km • ⏱️ ${s.duration}<br>
           🚆 ${s.transport} • ${s.transportPrice} €<br>
           🏨 ${s.hotelName}<br>
+          📍 ${s.hotelAddress}<br>
+          💰 ${s.hotelPrice} €
 
           <div class="actions">
             <button class="btn-secondary" onclick="editStep(${i})">Modifier</button>
@@ -235,6 +251,9 @@ function render() {
     }
 
   });
+
+  document.getElementById("totalKm").innerText = totalKm;
+  document.getElementById("totalPrice").innerText = totalPrice;
 }
 
 render();

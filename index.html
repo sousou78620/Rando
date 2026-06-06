@@ -2,14 +2,14 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Itinéraire</title>
+<title>Mon itinéraire</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
   font-family: Arial;
   background: #eef5f0;
-  padding: 10px;
+  padding: 15px;
 }
 
 .card {
@@ -32,6 +32,11 @@ button {
   color: white;
   border: none;
 }
+
+.section-title {
+  font-weight: bold;
+  margin-top: 5px;
+}
 </style>
 </head>
 
@@ -41,3 +46,82 @@ button {
 
 <div class="card">
 
+  <div class="section-title">Étape</div>
+  <input id="step">
+  <input id="km" placeholder="km">
+  <input id="price" placeholder="price">
+
+  <button onclick="addStep()">Ajouter une étape</button>
+
+</div>
+
+<div class="card">
+  Km total : <span id="totalKm">0</span><br>
+  Budget : <span id="totalPrice">0</span>
+</div>
+
+<div id="list"></div>
+
+<script>
+let steps = [];
+let editingIndex = null;
+
+function addStep() {
+
+  const stepInput = document.getElementById("step");
+  const kmInput = document.getElementById("km");
+  const priceInput = document.getElementById("price");
+
+  const stepVal = stepInput.value;
+  const kmVal = parseFloat(kmInput.value) || 0;
+  const priceVal = parseFloat(priceInput.value) || 0;
+
+  if (!stepVal) {
+    alert("Ajoute une étape");
+    return;
+  }
+
+  const newStep = { step: stepVal, km: kmVal, price: priceVal };
+
+  if (editingIndex !== null) {
+    steps[editingIndex] = newStep;
+    editingIndex = null;
+  } else {
+    steps.push(newStep);
+  }
+
+  render();
+
+  stepInput.value = "";
+  kmInput.value = "";
+  priceInput.value = "";
+}
+
+function editStep(i) {
+  const s = steps[i];
+
+  document.getElementById("step").value = s.step;
+  document.getElementById("km").value = s.km;
+  document.getElementById("price").value = s.price;
+
+  editingIndex = i;
+}
+
+function deleteStep(i) {
+  steps.splice(i, 1);
+  render();
+}
+
+function render() {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  let totalKm = 0;
+  let totalPrice = 0;
+
+  steps.forEach((s, i) => {
+
+    totalKm += s.km;
+    totalPrice += s.price;
+
+    const card = document.createElement("div");

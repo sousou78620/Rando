@@ -5,7 +5,7 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ police correcte -->
+  <!-- ✅ POLICE CORRECTE -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -218,46 +218,3 @@ function render() {
     if (editingIndex === i) {
       list.innerHTML += `
         <div class="card" id="edit-${i}">
-          <input type="date" value="${s.startDate}">
-          <input value="${s.step}">
-          <input value="${s.km}">
-          <input value="${s.duration}">
-          <input value="${s.transport}">
-          <input value="${s.transportPrice}">
-          <input value="${s.hotelName}">
-          <input value="${s.hotelAddress}">
-          <input value="${s.hotelPrice}">
-          <textarea>${s.things}</textarea>
-          <textarea>${s.comments}</textarea>
-          <button onclick="saveEdit(${i})">💾 Sauvegarder</button>
-        </div>
-      `;
-    } else {
-      list.innerHTML += `
-        <div class="card">
-          <div class="header">${formatDateFR(s.startDate)} — ${s.step}</div>
-          🚗 ${s.km} km • ⏱️ ${s.duration}<br>
-          🚆 ${s.transport} • ${s.transportPrice} €<br>
-          🏨 ${s.hotelName}<br>
-          📍 ${s.hotelAddress}<br>
-          💰 ${s.hotelPrice} €
-
-          <div class="actions">
-            <button class="btn-secondary" onclick="editStep(${i})">Modifier</button>
-            <button class="btn-danger" onclick="deleteStep(${i})">Supprimer</button>
-          </div>
-        </div>
-      `;
-    }
-
-  });
-
-  document.getElementById("totalKm").innerText = totalKm;
-  document.getElementById("totalPrice").innerText = totalPrice;
-}
-
-render();
-</script>
-
-</body>
-</html>

@@ -5,7 +5,6 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Police Google plus fun -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -14,7 +13,6 @@
       background: #eef5f0;
       padding: 14px;
       margin: 0;
-      font-size: 16px;
     }
 
     h1 {
@@ -22,81 +20,70 @@
       color: #2e7d32;
       font-weight: 800;
       font-size: 26px;
-      margin-bottom: 18px;
     }
 
     .card {
       background: white;
-      border-radius: 20px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
     }
 
     input, textarea {
       width: 100%;
+      padding: 10px;
       margin-bottom: 8px;
-      padding: 12px;
-      border-radius: 14px;
+      border-radius: 12px;
       border: 1px solid #d9e8dc;
       background: #f8fbf9;
-      font-size: 15px;
-      font-family: 'Nunito', sans-serif;
     }
 
     button {
       width: 100%;
-      padding: 12px;
-      border-radius: 14px;
+      padding: 10px;
+      border-radius: 12px;
       border: none;
       background: #4caf50;
       color: white;
       font-weight: 700;
-      font-size: 15px;
       margin-top: 8px;
     }
 
     .section {
-      margin-top: 14px;
-      padding-top: 10px;
+      margin-top: 12px;
       border-top: 1px solid #eef2ef;
+      padding-top: 10px;
     }
 
     .section-title {
-      font-size: 16px;
       font-weight: 800;
       color: #2e7d32;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .header {
       font-weight: 800;
       font-size: 18px;
       color: #1b5e20;
-      margin-bottom: 6px;
     }
 
     .line {
-      font-size: 15px;
-      margin: 4px 0;
+      margin: 3px 0;
     }
 
     .actions {
       display: flex;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 6px;
+      margin-top: 8px;
     }
 
-    .btn-secondary {
-      background: #78909c;
-    }
+    .btn-secondary { background: #78909c; }
+    .btn-danger { background: #ef5350; }
 
-    .btn-danger {
-      background: #ef5350;
-    }
-
-    textarea {
-      resize: none;
+    .totals {
+      position: sticky;
+      top: 10px;
     }
   </style>
 </head>
@@ -122,12 +109,25 @@
   </div>
 
   <div class="section">
+    <div class="section-title">🏨 Hébergement</div>
+    <input id="hotelName" placeholder="Nom de l’hébergement">
+    <input id="hotelAddress" placeholder="Adresse">
+    <input id="hotelPrice" placeholder="Prix (€)">
+  </div>
+
+  <div class="section">
     <div class="section-title">📋 Infos</div>
     <textarea id="things" placeholder="Choses à voir"></textarea>
     <textarea id="comments" placeholder="Commentaires"></textarea>
   </div>
 
   <button onclick="addStep()">Ajouter une étape</button>
+</div>
+
+<div class="card totals">
+  <h3>📊 Totaux</h3>
+  <div>🚗 Km total : <b id="totalKm">0</b></div>
+  <div>💰 Budget total : <b id="totalPrice">0</b> €</div>
 </div>
 
 <div id="list"></div>
@@ -142,14 +142,17 @@ function save() {
 
 function addStep() {
   const step = {
-    startDate: document.getElementById("startDate").value,
-    step: document.getElementById("step").value,
-    km: parseFloat(document.getElementById("km").value) || 0,
-    duration: document.getElementById("duration").value,
-    transport: document.getElementById("transport").value,
-    transportPrice: parseFloat(document.getElementById("transportPrice").value) || 0,
-    things: document.getElementById("things").value,
-    comments: document.getElementById("comments").value
+    startDate: startDate.value,
+    step: step.value,
+    km: parseFloat(km.value) || 0,
+    duration: duration.value,
+    transport: transport.value,
+    transportPrice: parseFloat(transportPrice.value) || 0,
+    hotelName: hotelName.value,
+    hotelAddress: hotelAddress.value,
+    hotelPrice: parseFloat(hotelPrice.value) || 0,
+    things: things.value,
+    comments: comments.value
   };
 
   if (!step.step) return;
@@ -158,114 +161,6 @@ function addStep() {
   save();
   render();
 
-  document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+  document.querySelectorAll("input, textarea").forEach(e => e.value = "");
 }
 
-function deleteStep(i) {
-  steps.splice(i, 1);
-  save();
-  render();
-}
-
-function editStep(i) {
-  editingIndex = i;
-  render();
-}
-
-function saveEdit(i) {
-  const c = document.getElementById("edit-" + i);
-
-  steps[i] = {
-    startDate: c.querySelector("input[type=date]").value,
-    step: c.querySelectorAll("input")[1].value,
-    km: parseFloat(c.querySelectorAll("input")[2].value) || 0,
-    duration: c.querySelectorAll("input")[3].value,
-    transport: c.querySelectorAll("input")[4].value,
-    transportPrice: parseFloat(c.querySelectorAll("input")[5].value) || 0,
-    things: c.querySelectorAll("textarea")[0].value,
-    comments: c.querySelectorAll("textarea")[1].value
-  };
-
-  editingIndex = null;
-  save();
-  render();
-}
-
-function formatDateFR(d) {
-  if (!d) return "";
-  return new Date(d).toLocaleDateString("fr-FR");
-}
-
-function render() {
-  const list = document.getElementById("list");
-  list.innerHTML = "";
-
-  steps.forEach((s, i) => {
-
-    if (editingIndex === i) {
-      list.innerHTML += `
-        <div class="card" id="edit-${i}">
-
-          <div class="section">
-            <div class="section-title">📍 Étape</div>
-            <input type="date" value="${s.startDate}">
-            <input value="${s.step}">
-            <input value="${s.km}">
-            <input value="${s.duration}">
-          </div>
-
-          <div class="section">
-            <div class="section-title">🚗 Déplacement</div>
-            <input value="${s.transport}">
-            <input value="${s.transportPrice}">
-          </div>
-
-          <div class="section">
-            <div class="section-title">📋 Infos</div>
-            <textarea>${s.things}</textarea>
-            <textarea>${s.comments}</textarea>
-          </div>
-
-          <button onclick="saveEdit(${i})">💾 Sauvegarder</button>
-        </div>
-      `;
-    } else {
-      list.innerHTML += `
-        <div class="card">
-
-          <div class="header">${formatDateFR(s.startDate)} — ${s.step}</div>
-
-          <div class="section">
-            <div class="section-title">📍 Étape</div>
-            <div class="line">🚗 ${s.km} km • ⏱️ ${s.duration}</div>
-          </div>
-
-          <div class="section">
-            <div class="section-title">🚗 Déplacement</div>
-            <div class="line">${s.transport}</div>
-            <div class="line">💰 ${s.transportPrice} €</div>
-          </div>
-
-          <div class="section">
-            <div class="section-title">📋 Infos</div>
-            <div class="line">👀 ${s.things}</div>
-            <div class="line">${s.comments}</div>
-          </div>
-
-          <div class="actions">
-            <button class="btn-secondary" onclick="editStep(${i})">Modifier</button>
-            <button class="btn-danger" onclick="deleteStep(${i})">Supprimer</button>
-          </div>
-
-        </div>
-      `;
-    }
-
-  });
-}
-
-render();
-</script>
-
-</body>
-</html>

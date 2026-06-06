@@ -1,114 +1,54 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Mon itinéraire</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Itinéraire</title>
 
 <style>
 body {
   font-family: Arial;
-  background: #eef5f0;
-  padding: 15px;
+  background: #f3f3f3;
+  padding: 20px;
 }
 
 .card {
   background: white;
   padding: 10px;
-  border-radius: 10px;
   margin: 10px 0;
 }
-
-input {
-  width: 100%;
-  margin-bottom: 5px;
-}
-
-button {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  background: green;
-  color: white;
-  border: none;
-}
-
-.section-title {
-  font-weight: bold;
-  margin-top: 5px;
-}
 </style>
-</head>
 
+</head>
 <body>
 
 <h2>Mon itinéraire</h2>
 
 <div class="card">
-
-  <div class="section-title">Étape</div>
+  <div>Étape</div>
   <input id="step">
   <input id="km" placeholder="km">
-  <input id="price" placeholder="price">
+  <input id="price" placeholder="prix">
 
   <button onclick="addStep()">Ajouter une étape</button>
-
-</div>
-
-<div class="card">
-  Km total : <span id="totalKm">0</span><br>
-  Budget : <span id="totalPrice">0</span>
 </div>
 
 <div id="list"></div>
 
 <script>
 let steps = [];
-let editingIndex = null;
 
 function addStep() {
+  const step = document.getElementById("step").value;
+  const km = document.getElementById("km").value;
+  const price = document.getElementById("price").value;
 
-  const stepInput = document.getElementById("step");
-  const kmInput = document.getElementById("km");
-  const priceInput = document.getElementById("price");
-
-  const stepVal = stepInput.value;
-  const kmVal = parseFloat(kmInput.value) || 0;
-  const priceVal = parseFloat(priceInput.value) || 0;
-
-  if (!stepVal) {
+  if (!step) {
     alert("Ajoute une étape");
     return;
   }
 
-  const newStep = { step: stepVal, km: kmVal, price: priceVal };
+  steps.push({ step, km, price });
 
-  if (editingIndex !== null) {
-    steps[editingIndex] = newStep;
-    editingIndex = null;
-  } else {
-    steps.push(newStep);
-  }
-
-  render();
-
-  stepInput.value = "";
-  kmInput.value = "";
-  priceInput.value = "";
-}
-
-function editStep(i) {
-  const s = steps[i];
-
-  document.getElementById("step").value = s.step;
-  document.getElementById("km").value = s.km;
-  document.getElementById("price").value = s.price;
-
-  editingIndex = i;
-}
-
-function deleteStep(i) {
-  steps.splice(i, 1);
   render();
 }
 
@@ -116,12 +56,17 @@ function render() {
   const list = document.getElementById("list");
   list.innerHTML = "";
 
-  let totalKm = 0;
-  let totalPrice = 0;
+  for (let i = 0; i < steps.length; i++) {
+    const s = steps[i];
 
-  steps.forEach((s, i) => {
+    list.innerHTML += `
+      <div class="card">
+        ${s.step} - ${s.km} km - ${s.price}
+      </div>
+    `;
+  }
+}
+</script>
 
-    totalKm += s.km;
-    totalPrice += s.price;
-
-    const card = document.createElement("div");
+</body>
+</html>

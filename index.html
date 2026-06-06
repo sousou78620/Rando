@@ -5,116 +5,57 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Police Google plus fun -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: 'Nunito', sans-serif;
       background: #eef5f0;
       padding: 14px;
       margin: 0;
+      font-size: 16px;
     }
 
     h1 {
       text-align: center;
       color: #2e7d32;
+      font-weight: 800;
+      font-size: 26px;
       margin-bottom: 18px;
     }
 
     .card {
       background: white;
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 14px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
     }
 
     input, textarea {
       width: 100%;
       margin-bottom: 8px;
-      padding: 10px;
-      border-radius: 12px;
+      padding: 12px;
+      border-radius: 14px;
       border: 1px solid #d9e8dc;
       background: #f8fbf9;
+      font-size: 15px;
+      font-family: 'Nunito', sans-serif;
     }
 
     button {
       width: 100%;
-      padding: 10px;
-      border-radius: 12px;
+      padding: 12px;
+      border-radius: 14px;
       border: none;
       background: #4caf50;
       color: white;
-      font-weight: 600;
-      margin-top: 6px;
+      font-weight: 700;
+      font-size: 15px;
+      margin-top: 8px;
     }
 
     .section {
-      margin-top: 10px;
+      margin-top: 14px;
       padding-top: 10px;
-      border-top: 1px solid #eef2ef;
-    }
-
-    .section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #5a7f66;
-      margin-bottom: 6px;
-    }
-
-    .header {
-      font-weight: 700;
-      font-size: 15px;
-      color: #1b5e20;
-      margin-bottom: 6px;
-    }
-
-    .line {
-      font-size: 14px;
-      margin: 2px 0;
-    }
-
-    .actions {
-      display: flex;
-      gap: 6px;
-      margin-top: 10px;
-    }
-
-    .btn-secondary {
-      background: #78909c;
-    }
-
-    .btn-danger {
-      background: #ef5350;
-    }
-
-    textarea {
-      resize: none;
-    }
-  </style>
-</head>
-
-<body>
-
-<h1>🌿 Mon itinéraire</h1>
-
-<div class="card">
-
-  <div class="section">
-    <div class="section-title">📍 Étape</div>
-    <input id="startDate" type="date">
-    <input id="step" placeholder="Étape">
-    <input id="km" placeholder="Kilomètres">
-    <input id="duration" placeholder="Durée">
-  </div>
-
-  <div class="section">
-    <div class="section-title">🚗 Déplacement</div>
-    <input id="transport" placeholder="Transport">
-    <input id="transportPrice" placeholder="Prix transport (€)">
-  </div>
-
-  <div class="section">
-    <div class="section-title">📋 Infos</div>
-    <textarea id="things" placeholder="Choses à voir"></textarea>
-    <textarea id="comments" placeholder="Commentaires"></textarea>
-  </div>
-

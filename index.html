@@ -251,11 +251,13 @@ function render() {
       list.innerHTML += `
         <div class="card">
 
-          <div class="header">${formatDateFR(s.startDate)} — ${s.step}</div>
+          <div class="header">${formatDateFR(s.startDate)}</div>
 
           <div class="section">
             <div class="section-title">📍 Étape</div>
-             ${s.km} km •  ${s.duration}
+              ${s.step}<br>
+              ${s.km} km •  ${s.duration}
+
           </div>
 
           <div class="section">

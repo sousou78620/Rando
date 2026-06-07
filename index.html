@@ -5,8 +5,8 @@
   <title>Itinéraire Vacances</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ VERSION CORRECTE -->
-  https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap
+  <!-- ✅ CORRECT : plus d’URL affichée -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -215,18 +215,36 @@ function render() {
     if (editingIndex === i) {
       list.innerHTML += `
         <div class="card" id="edit-${i}">
-          <input type="date" value="${s.startDate}">
-          <input value="${s.step}">
-          <input value="${s.km}">
-          <input value="${s.duration}">
-          <input value="${s.transport}">
-          <input value="${s.transportPrice}">
-          <input value="${s.hotelName}">
-          <input value="${s.hotelAddress}">
-          <input value="${s.hotelPrice}">
-          <textarea>${s.things}</textarea>
-          <textarea>${s.comments}</textarea>
+
+          <div class="section">
+            <div class="section-title">📍 Étape</div>
+            <input type="date" value="${s.startDate}">
+            <input value="${s.step}">
+            <input value="${s.km}">
+            <input value="${s.duration}">
+          </div>
+
+          <div class="section">
+            <div class="section-title">🚗 Déplacement</div>
+            <input value="${s.transport}">
+            <input value="${s.transportPrice}">
+          </div>
+
+          <div class="section">
+            <div class="section-title">🏨 Hébergement</div>
+            <input value="${s.hotelName}">
+            <input value="${s.hotelAddress}">
+            <input value="${s.hotelPrice}">
+          </div>
+
+          <div class="section">
+            <div class="section-title">📋 Infos</div>
+            <textarea>${s.things}</textarea>
+            <textarea>${s.comments}</textarea>
+          </div>
+
           <button onclick="saveEdit(${i})">💾 Sauvegarder</button>
+
         </div>
       `;
     } else {
